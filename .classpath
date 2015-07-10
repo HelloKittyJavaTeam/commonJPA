@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="src/META-INF/lib/commonJPA.jar"/>
+	<classpathentry kind="lib" path="C:/Users/RANDOM/commonLib/eclipselink-2.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/RANDOM/commonLib/javax.persistence-2.0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/RANDOM/commonLib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/RANDOM/commonLib/ojdbc6-11.2.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
