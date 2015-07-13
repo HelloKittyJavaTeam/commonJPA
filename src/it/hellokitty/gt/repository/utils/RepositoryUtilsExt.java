@@ -87,32 +87,46 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 			HashMap<String,Object> paramLike,
 			HashMap<String,Object> paramGE,
 			HashMap<String,Object> paramLE){
-
-		for(String ordCol: orderColumn.keySet()){
-			if(orderColumn.get(ordCol).equalsIgnoreCase("asc")){
-				cq.orderBy(cb.asc(t.get(ordCol)));
-			}else{
-				cq.orderBy(cb.desc(t.get(ordCol)));    
+		List<Predicate> listPred = new LinkedList<Predicate>();
+		
+		if(orderColumn != null){
+			for(String ordCol: orderColumn.keySet()){
+				if(orderColumn.get(ordCol).equalsIgnoreCase("asc")){
+					cq.orderBy(cb.asc(t.get(ordCol)));
+				}else{
+					cq.orderBy(cb.desc(t.get(ordCol)));    
+				}
 			}
 		}
-		List<Predicate> listPred = new LinkedList<Predicate>();
 
-		for(String column: paramEquals.keySet()){
-			Predicate pred = cb.equal(t.get(column), paramEquals.get(column));
-			listPred.add(pred);
+		if(paramEquals != null){
+			for(String column: paramEquals.keySet()){
+				Predicate pred = cb.equal(t.get(column), paramEquals.get(column));
+				listPred.add(pred);
+			}
 		}
-		for(String column: paramLike.keySet()){
-			Predicate pred =  cb.like(t.<String>get(column), "%"+paramLike.get(column).toString()+"%");
-			listPred.add(pred);
+		
+		if(paramLike != null){
+			for(String column: paramLike.keySet()){
+				Predicate pred =  cb.like(t.<String>get(column), "%"+paramLike.get(column).toString()+"%");
+				listPred.add(pred);
+			}
 		}
-		for(String column: paramLE.keySet()){
-			Predicate pred =  cb.le(t.<Number>get(column), (Number)paramLE.get(column));
-			listPred.add(pred);
+		
+		if(paramGE != null){
+			for(String column: paramLE.keySet()){
+				Predicate pred =  cb.le(t.<Number>get(column), (Number)paramLE.get(column));
+				listPred.add(pred);
+			}
 		}
-		for(String column: paramGE.keySet()){
-			Predicate pred =  cb.ge(t.<Number>get(column), (Number)paramLE.get(column));
-			listPred.add(pred);
+		
+		if(paramLE != null){
+			for(String column: paramGE.keySet()){
+				Predicate pred =  cb.ge(t.<Number>get(column), (Number)paramLE.get(column));
+				listPred.add(pred);
+			}
 		}
+		
 		Predicate[] predArray = new Predicate[listPred.size()];
 		listPred.toArray(predArray);
 		cq.where(predArray);
@@ -122,39 +136,14 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Long count(HashMap<String,Object> paramEquals, HashMap<String,Object> paramLike, HashMap<String,Object> paramGE, HashMap<String,Object> paramLE ) throws Exception{
-		LinkedHashMap<String, String> orderColumn = new LinkedHashMap<String, String>();
-		//        CriteriaQuery<Long> cq = (CriteriaQuery<Long>) cb.createQuery(typeParameterClass);
-		//        Root<T> entity = cq.from(typeParameterClass);
-		//
-		//        List<Predicate> listPred = new LinkedList<Predicate>();
-		//       
-		//        for(String column: paramEquals.keySet()){
-		//               Predicate pred = cb.equal(entity.get(column), paramEquals.get(column));
-		//               listPred.add(pred);
-		//        }
-		//        for(String column: paramLike.keySet()){
-		//               Predicate pred =  cb.like(entity.<String>get(column), "%"+paramLike.get(column).toString()+"%");
-		//               listPred.add(pred);
-		//        }
-		//        for(String column: paramLE.keySet()){
-		//               Predicate pred =  cb.le(entity.<Number>get(column), (Number)paramLE.get(column));
-		//               listPred.add(pred);
-		//        }
-		//        for(String column: paramGE.keySet()){
-		//               Predicate pred =  cb.ge(entity.<Number>get(column), (Number)paramLE.get(column));
-		//               listPred.add(pred);
-		//        }
-		//        Predicate[] predArray = new Predicate[listPred.size()];
-		//        listPred.toArray(predArray);
-		//        cq.where(predArray);
-
+	public Long count(HashMap<String,Object> paramEquals, HashMap<String,Object> paramLike, HashMap<String,Object> paramGE, HashMap<String,Object> paramLE) throws Exception{
+//		LinkedHashMap<String, String> orderColumn = new LinkedHashMap<String, String>();
 
 		CriteriaBuilder cb = getEm().getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(typeParameterClass);
 		Root<T> entity = cq.from(typeParameterClass);
 
-		cq = innerSearch(cb, cq, entity, orderColumn, paramEquals, paramLike, paramGE, paramLE);
+		cq = innerSearch(cb, cq, entity, null, paramEquals, paramLike, paramGE, paramLE);
 
 		cq.select((Expression<T>)cb.count(entity));
 
