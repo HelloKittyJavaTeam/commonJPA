@@ -1,5 +1,7 @@
 package it.hellokitty.gt.repository.utils;
 
+import it.hellokitty.gt.repository.RepositoryExt;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -17,7 +19,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 
-public abstract class RepositoryUtilsExt<T>{// implements RepositoryExt<T>{
+public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 	protected Class<T> typeParameterClass;
 	private static Map<String, EntityManager> emMap = new HashMap<String, EntityManager>();
 	
@@ -58,23 +60,23 @@ public abstract class RepositoryUtilsExt<T>{// implements RepositoryExt<T>{
 		return cq;
 	}
 
-//	@Override
-//    public List<T> search(
-//                 Integer start, Integer limit,
-//                 LinkedHashMap<String,String> orderColumn,
-//                 HashMap<String,Object> paramEquals,
-//                 HashMap<String,Object> paramLike,
-//                 HashMap<String,Object> paramGE,
-//                 HashMap<String,Object> paramLE){
-//         
-//         CriteriaQuery<T> cq = innerSearch(orderColumn, paramEquals, paramLike, paramGE, paramLE);
-//         Root<T> t = cq.from(typeParameterClass);
-//          
-//          cq.select(t);
-//          TypedQuery<T> q = paginate(cq, start, limit);
-//         
-//          return q.getResultList();
-//    }
+	@Override
+    public List<T> search(
+                 Integer start, Integer limit,
+                 LinkedHashMap<String,String> orderColumn,
+                 HashMap<String,Object> paramEquals,
+                 HashMap<String,Object> paramLike,
+                 HashMap<String,Object> paramGE,
+                 HashMap<String,Object> paramLE){
+         
+         CriteriaQuery<T> cq = innerSearch(orderColumn, paramEquals, paramLike, paramGE, paramLE);
+         Root<T> t = cq.from(typeParameterClass);
+          
+          cq.select(t);
+          TypedQuery<T> q = paginate(cq, start, limit);
+         
+          return q.getResultList();
+    }
     
     protected CriteriaQuery<T> innerSearch(LinkedHashMap<String,String> orderColumn,
             HashMap<String,Object> paramEquals,
@@ -118,33 +120,72 @@ public abstract class RepositoryUtilsExt<T>{// implements RepositoryExt<T>{
         return cq;
     }
     
-//	@Override
-//	public List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn){
-//		
-//		HashMap<String,Object> paramEquals = new HashMap<String, Object>();
-//		HashMap<String,Object> paramLike = new HashMap<String, Object>();
-//        HashMap<String,Object> paramGE = new HashMap<String, Object>();
-//        HashMap<String,Object> paramLE = new HashMap<String, Object>();
-//        
-//        return search(start, limit, orderColumn, paramEquals, paramLike, paramGE, paramLE);
-//	}
-	
-//    @Override
-//	public T fetchById(Object id) throws Exception {
-//		return getEm().find(typeParameterClass, id);
-//	}
-	
-//	@Override
-//	public Long count() throws Exception{
-//		CriteriaBuilder cb = getEm().getCriteriaBuilder();
-//		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-//		Root<T> entity = cq.from(typeParameterClass);
+	@Override
+	@SuppressWarnings("unchecked")
+	public Long count(HashMap<String,Object> paramEquals, HashMap<String,Object> paramLike, HashMap<String,Object> paramGE, HashMap<String,Object> paramLE ) throws Exception{
+		LinkedHashMap<String, String> orderColumn = new LinkedHashMap<String, String>();
+		CriteriaBuilder cb = getEm().getCriteriaBuilder();
+//        CriteriaQuery<Long> cq = (CriteriaQuery<Long>) cb.createQuery(typeParameterClass);
+//        Root<T> entity = cq.from(typeParameterClass);
 //
-//		cq.select(cb.count(entity));
-//		try{
-//			return getEm().createQuery(cq).getSingleResult();
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
+//        List<Predicate> listPred = new LinkedList<Predicate>();
+//       
+//        for(String column: paramEquals.keySet()){
+//               Predicate pred = cb.equal(entity.get(column), paramEquals.get(column));
+//               listPred.add(pred);
+//        }
+//        for(String column: paramLike.keySet()){
+//               Predicate pred =  cb.like(entity.<String>get(column), "%"+paramLike.get(column).toString()+"%");
+//               listPred.add(pred);
+//        }
+//        for(String column: paramLE.keySet()){
+//               Predicate pred =  cb.le(entity.<Number>get(column), (Number)paramLE.get(column));
+//               listPred.add(pred);
+//        }
+//        for(String column: paramGE.keySet()){
+//               Predicate pred =  cb.ge(entity.<Number>get(column), (Number)paramLE.get(column));
+//               listPred.add(pred);
+//        }
+//        Predicate[] predArray = new Predicate[listPred.size()];
+//        listPred.toArray(predArray);
+//        cq.where(predArray);
+		
+		CriteriaQuery<Long> cq = (CriteriaQuery<Long>) innerSearch(orderColumn, paramEquals, paramLike, paramGE, paramLE);
+		Root<T> entity = cq.from(typeParameterClass);
+		
+
+		cq.select(cb.count(entity));
+
+		return getEm().createQuery(cq).getSingleResult();
+	}
+    
+	@Override
+	public List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn){
+		
+		HashMap<String,Object> paramEquals = new HashMap<String, Object>();
+		HashMap<String,Object> paramLike = new HashMap<String, Object>();
+        HashMap<String,Object> paramGE = new HashMap<String, Object>();
+        HashMap<String,Object> paramLE = new HashMap<String, Object>();
+        
+        return search(start, limit, orderColumn, paramEquals, paramLike, paramGE, paramLE);
+	}
+	
+    @Override
+	public T fetchById(Object id) throws Exception {
+		return getEm().find(typeParameterClass, id);
+	}
+	
+	@Override
+	public Long count() throws Exception{
+		CriteriaBuilder cb = getEm().getCriteriaBuilder();
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		Root<T> entity = cq.from(typeParameterClass);
+
+		cq.select(cb.count(entity));
+		try{
+			return getEm().createQuery(cq).getSingleResult();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

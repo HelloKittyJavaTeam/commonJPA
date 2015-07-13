@@ -12,13 +12,13 @@ public interface ServiceExt<T> {
 	 * @param id - Object
 	 * @throws Exception
 	 */
-	T fetchById(Object id) throws  Exception;
+	T fetchById(Object id) throws IllegalArgumentException, Exception;
 	
-	List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn) throws Exception;
+	List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn) throws IllegalArgumentException, Exception;
 		
-	Long count() throws Exception;
+	Long count() throws IllegalArgumentException, Exception;
 	
-	Long count(HashMap<String,Object> paramEquals, HashMap<String,Object> paramLike, HashMap<String,Object> paramGE, HashMap<String,Object> paramLE ) throws Exception;
+	Long count(HashMap<String,Object> paramEquals, HashMap<String,Object> paramLike, HashMap<String,Object> paramGE, HashMap<String,Object> paramLE ) throws IllegalArgumentException, Exception;
 	
 	List<T> search(Integer start, Integer limit, 
 			LinkedHashMap<String,String> orderColumn,
