@@ -61,6 +61,7 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 		return cq;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> search(
 			Integer start, Integer limit,
@@ -82,7 +83,8 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 		return q.getResultList();
 	}
 
-	protected CriteriaQuery<T> innerSearch(CriteriaBuilder cb, CriteriaQuery<T> cq, Root<T> t, LinkedHashMap<String,String> orderColumn,
+	@SuppressWarnings("rawtypes")
+	protected CriteriaQuery innerSearch(CriteriaBuilder cb, CriteriaQuery cq, Root<T> t, LinkedHashMap<String,String> orderColumn,
 			HashMap<String,Object> paramEquals,
 			HashMap<String,Object> paramLike,
 			HashMap<String,Object> paramGE,
@@ -114,15 +116,15 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 		}
 		
 		if(paramGE != null){
-			for(String column: paramLE.keySet()){
-				Predicate pred =  cb.le(t.<Number>get(column), (Number)paramLE.get(column));
+			for(String column: paramGE.keySet()){
+				Predicate pred =  cb.ge(t.<Number>get(column), (Number)paramGE.get(column));
 				listPred.add(pred);
 			}
 		}
 		
 		if(paramLE != null){
-			for(String column: paramGE.keySet()){
-				Predicate pred =  cb.ge(t.<Number>get(column), (Number)paramLE.get(column));
+			for(String column: paramLE.keySet()){
+				Predicate pred =  cb.le(t.<Number>get(column), (Number)paramLE.get(column));
 				listPred.add(pred);
 			}
 		}
@@ -137,8 +139,6 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 	@Override
 	@SuppressWarnings("unchecked")
 	public Long count(HashMap<String,Object> paramEquals, HashMap<String,Object> paramLike, HashMap<String,Object> paramGE, HashMap<String,Object> paramLE) throws Exception{
-//		LinkedHashMap<String, String> orderColumn = new LinkedHashMap<String, String>();
-
 		CriteriaBuilder cb = getEm().getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(typeParameterClass);
 		Root<T> entity = cq.from(typeParameterClass);
@@ -152,13 +152,7 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 
 	@Override
 	public List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn){
-
-		HashMap<String,Object> paramEquals = new HashMap<String, Object>();
-		HashMap<String,Object> paramLike = new HashMap<String, Object>();
-		HashMap<String,Object> paramGE = new HashMap<String, Object>();
-		HashMap<String,Object> paramLE = new HashMap<String, Object>();
-
-		return search(start, limit, orderColumn, paramEquals, paramLike, paramGE, paramLE);
+		return search(start, limit, orderColumn, null, null, null,null);
 	}
 
 	@Override
