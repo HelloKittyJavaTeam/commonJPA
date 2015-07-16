@@ -14,11 +14,11 @@ public class BaseObject {
 	private Date createDate;
 	
 	@Column(name = "USER_CREATE", nullable=false)
-	private String userCreated;
+	private String userCreate;
 	
 	@Column(name = "UPDATE_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date update;
+	private Date updateDate;
 	
 	@Column(name = "USER_UPDATE")
 	private String userUpdate;
@@ -31,9 +31,8 @@ public class BaseObject {
 	}
 	
 	public BaseObject(String user){
-		setUserCreated(user);
+		setUserCreate(user);
 		setCreateDate(new Date());
-    	
 	}
 
 	public Date getCreateDate() {
@@ -44,20 +43,20 @@ public class BaseObject {
 		this.createDate = createDate;
 	}
 
-	public String getUserCreated() {
-		return userCreated;
+	public String getUserCreate() {
+		return userCreate;
 	}
 
-	public void setUserCreated(String userCreated) {
-		this.userCreated = userCreated;
+	public void setUserCreate(String userCreate) {
+		this.userCreate = userCreate;
 	}
 
-	public Date getUpdate() {
-		return update;
+	public Date getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUpdate(Date update) {
-		this.update = update;
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getUserUpdate() {
@@ -68,22 +67,11 @@ public class BaseObject {
 		this.userUpdate = userUpdate;
 	}
 
-	/**
-	 * This implementation will return Boolean. True if active value is != 0, false otherwise.
-	 * 
-	 * @return Boolean
-	 */
 	public Boolean isActive() {
 		return active;
 	}
 
-	/**
-	 * This implementation will set "1" if input parameter value is Boolean.TRUE, "0" otherwise.
-	 * 
-	 * @param active Boolean
-	 */
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
 }

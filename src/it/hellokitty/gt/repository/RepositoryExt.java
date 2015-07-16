@@ -14,7 +14,7 @@ public interface RepositoryExt<T> {
 	 */
 	T fetchById(Object id) throws  Exception;
 	
-	List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> cdList) throws Exception;
+	List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn) throws Exception;
 		
 	Long count() throws Exception;
 	

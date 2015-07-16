@@ -21,10 +21,13 @@ import javax.persistence.criteria.Root;
 
 
 public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
-	protected Class<T> typeParameterClass;
-	private static Map<String, EntityManager> emMap = new HashMap<String, EntityManager>();
-
+	public  Class<T> typeParameterClass;
 	public static String persistenceUnitName;
+	private static Map<String, EntityManager> emMap = new HashMap<String, EntityManager>();
+	
+	public RepositoryUtilsExt(){
+		super();
+	}
 
 	public static EntityManager getEm(){
 		if(!emMap.containsKey(persistenceUnitName)){

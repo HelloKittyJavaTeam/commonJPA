@@ -11,6 +11,8 @@ import java.util.List;
 import javax.persistence.EntityTransaction;
 
 public abstract class RepositoryUtils<T> extends RepositoryUtilsExt<T> implements Repository<T>{
+	
+	public RepositoryUtils(){}
     
 	@Override
 	public List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn, String user) throws Exception{
@@ -28,7 +30,7 @@ public abstract class RepositoryUtils<T> extends RepositoryUtilsExt<T> implement
 	public void insert(BaseObject elem, String user) throws Exception{
 		EntityTransaction transaction;
 
-		elem.setUserCreated(user);
+		elem.setUserCreate(user);
 		elem.setCreateDate(new Date());
 		elem.setActive(true);
 		
@@ -53,7 +55,7 @@ public abstract class RepositoryUtils<T> extends RepositoryUtilsExt<T> implement
 			transaction.begin();
 		    
 			elem.setUserUpdate(user);
-			elem.setUpdate(new Date());
+			elem.setUpdateDate(new Date());
 			elem.setActive(false);
 				
 			getEm().merge(elem);
@@ -77,7 +79,7 @@ public abstract class RepositoryUtils<T> extends RepositoryUtilsExt<T> implement
 			transaction.begin();
 			
 			elem.setUserUpdate(user);
-			elem.setUpdate(new Date());
+			elem.setUpdateDate(new Date());
 		    result = getEm().merge(elem);
 		    
 		    transaction.commit();
