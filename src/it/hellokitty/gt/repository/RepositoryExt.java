@@ -12,9 +12,9 @@ public interface RepositoryExt<T> {
 	 * @param id - Object
 	 * @throws Exception
 	 */
-	T fetchById(Object id) throws  Exception;
+	T getById(Object id) throws  Exception;
 	
-	List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn) throws Exception;
+	List<T> getAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn) throws Exception;
 		
 	Long count() throws Exception;
 	

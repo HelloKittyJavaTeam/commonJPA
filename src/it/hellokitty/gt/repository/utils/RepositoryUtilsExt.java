@@ -154,12 +154,12 @@ public abstract class RepositoryUtilsExt<T> implements RepositoryExt<T>{
 	}
 
 	@Override
-	public List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn){
+	public List<T> getAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn){
 		return search(start, limit, orderColumn, null, null, null,null);
 	}
 
 	@Override
-	public T fetchById(Object id) throws Exception {
+	public T getById(Object id) throws Exception {
 		return getEm().find(typeParameterClass, id);
 	}
 
