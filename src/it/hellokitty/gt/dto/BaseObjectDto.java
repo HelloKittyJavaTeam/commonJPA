@@ -10,9 +10,9 @@ import javax.persistence.TemporalType;
 public class BaseObjectDto {
 	private Date createDate;
 	
-	private String userCreated;
+	private String userCreate;
 	
-	private Date update;
+	private Date updateDate;
 	
 	private String userUpdate;
 	
@@ -26,20 +26,20 @@ public class BaseObjectDto {
 		this.createDate = createDate;
 	}
 
-	public String getUserCreated() {
-		return userCreated;
+	public String getUserCreate() {
+		return userCreate;
 	}
 
-	public void setUserCreated(String userCreated) {
-		this.userCreated = userCreated;
+	public void setUserCreate(String userCreate) {
+		this.userCreate = userCreate;
 	}
 
-	public Date getUpdate() {
-		return update;
+	public Date getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUpdate(Date update) {
-		this.update = update;
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getUserUpdate() {
