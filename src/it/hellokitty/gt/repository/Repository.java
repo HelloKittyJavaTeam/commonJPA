@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface Repository<T> extends RepositoryExt<T>{
 	
-	List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn, String user) throws Exception;
-	
 	void insert(BaseObject elem, String user) throws  Exception;
 
 	void delete(BaseObject elem, String user) throws Exception;

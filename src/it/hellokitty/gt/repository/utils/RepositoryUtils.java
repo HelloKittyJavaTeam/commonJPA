@@ -4,27 +4,12 @@ import it.hellokitty.gt.entity.BaseObject;
 import it.hellokitty.gt.repository.Repository;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.persistence.EntityTransaction;
 
 public abstract class RepositoryUtils<T> extends RepositoryUtilsExt<T> implements Repository<T>{
 	
 	public RepositoryUtils(){}
-    
-	@Override
-	public List<T> fetchAll(Integer start, Integer limit, LinkedHashMap<String, String> orderColumn, String user) throws Exception{
-		HashMap<String,Object> paramEquals = new HashMap<String, Object>();
-		paramEquals.put("userCreated", user);
-		paramEquals.put("active", true);
-		HashMap<String,Object> paramLike = new HashMap<String, Object>();
-        HashMap<String,Object> paramGE = new HashMap<String, Object>();
-        HashMap<String,Object> paramLE = new HashMap<String, Object>();
-        
-        return search(start, limit, orderColumn, paramEquals, paramLike, paramGE, paramLE);
-	}
 	
 	@Override
 	public void insert(BaseObject elem, String user) throws Exception{
